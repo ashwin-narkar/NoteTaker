@@ -14,7 +14,7 @@ fftOut = fft.rfft(amplitude[0:22049])
 fftMag = absolute(fftOut)
 # for i in fftMag:
 # 	print i
-hz = (argmax(fftMag[1:])-1)/2
+hz = (argmax(fftMag[1:]))/2
 print(hz)
 '''
 for i in range(0,44100*3,256):
