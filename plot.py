@@ -10,15 +10,15 @@ from scipy.io import wavfile
 def getHzofChunk(chunk,binsize):
 	fftOut = fft.rfft(chunk)
 	fftMag = absolute(fftOut)
-	return (argmax(mag)*binsize/2)
+	return (argmax(fftMag)*binsize/2)
 
 def plotChunk(chunk):
 	plt.figure(1)
-	plt.plot(amplitude[0:chunksize])
-	plt.figure(2)
-	fftOut = fft.rfft(chunk)
-	fftMag = absolute(fftOut)
-	plt.plot(fftMag)
+	plt.plot(chunk)
+	# plt.figure(2)
+	# fftOut = fft.rfft(chunk)
+	# fftMag = absolute(fftOut)
+	# plt.plot(fftMag)
 	plt.show()
 
 
@@ -28,9 +28,10 @@ def main():
 	amplitude = data[:,0]
 	chunksize = 2205
 	binsize = fs/chunksize
-	
-	note = getHzofChunk(amplitude[0:chunksize])
-
+	for i in range(0,len(amplitude),chunksize):
+		note = getHzofChunk(amplitude[i:i+chunksize],binsize)
+		print(note)
+	plotChunk(amplitude)
 
 
 if __name__ == "__main__":
