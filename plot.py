@@ -4,6 +4,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 from numpy import*
+from notes import*
 from scipy.io import wavfile
 
 
@@ -36,7 +37,7 @@ def analyzeRecording(amplitude,chunksize,binsize):
 			print("Edge found at " + str(i) + " Average="+str(moving_average))
 			i+=30
 			freq = getHzofChunk(amplitude[i:i+chunksize],binsize)
-			print(freq)
+			print(identifyNote(freq))
 			edge=True
 		if (moving_average<500 and edge==True):
 			edge=False
