@@ -27,6 +27,11 @@ def analyzeRecording(amplitude,chunksize,binsize):
 	MAS=100
 	moving_average = 0
 	edge = False
+	firstNoteDone = False
+	prevNoteIndex = 0
+	duration = 0
+	prevMovingAvg = 0
+	output = []
 	while (i < len(amplitude)-chunksize):
 		moving_average = 0
 		for x in range(MAS):
@@ -34,13 +39,67 @@ def analyzeRecording(amplitude,chunksize,binsize):
 		moving_average/=MAS
 		i+=100
 		if (moving_average>1250 and edge==False):
+			if (firstNoteDone):
+				duration = i - prevNoteIndex
+				prevNoteIndex = i
+				print("Note duration=" + str(duration))
+				output.append(duration)
+				print("")
+			else:
+				prevNoteIndex = i
+				firstNoteDone = True
 			print("Edge found at " + str(i) + " Average="+str(moving_average))
 			i+=30
 			freq = getHzofChunk(amplitude[i:i+chunksize],binsize)
 			print(identifyNote(freq))
+			output.append(identifyNote(freq))
 			edge=True
 		if (moving_average<750 and edge==True):
 			edge=False
+	return output
+
+def analyzeRecording2(amplitude,chunksize,binsize):
+	i=0
+	MAS=100
+	moving_average = 0
+	edge = False
+	firstNoteDone = False
+	prevNoteIndex = 0
+	duration = 0
+	prevMovingAvg = 0
+	output = []
+	while (i < len(amplitude)-chunksize):
+		moving_average = 0
+		for x in range(MAS):
+			moving_average = moving_average+ absolute(amplitude[x+i])
+		moving_average/=MAS
+		i+=100
+		if (firstNoteDone):
+			difference = moving_average - prevMovingAvg
+			if (difference > (0.4*moving_average)):
+				# print("Edge detected at " + str(i-50))
+				edge = True
+			else:
+				edge = False
+		else:
+			prevMovingAvg = moving_average
+			firstNoteDone = True
+			prevNoteIndex = -10000
+			continue
+		prevMovingAvg = moving_average
+
+		if (edge == True):
+		
+			duration = i - prevNoteIndex
+			if (duration <= 700):
+				continue
+			prevNoteIndex = i
+			freq = getHzofChunk(amplitude[i:i+chunksize],binsize)
+			output.append((duration)/22050.0)
+			output.append(identifyNote(freq))
+	return output[1:]	
+	
+		
 
 def main():
 	filename = sys.argv[1]
@@ -59,14 +118,14 @@ def main():
 			moving_average = moving_average+ absolute(amplitude[x+i])
 		moving_average/=MAS
 		averagePlot.append(moving_average)
-		
 		i+=100
+	
+	print(analyzeRecording2(amplitude,chunksize,binsize))
 	# plt.figure(1)
 	# plt.plot(absolute(amplitude))
-	# plt.figure(2)
-	# plt.plot(averagePlot)
-	# plt.show()
-	analyzeRecording(amplitude,chunksize,binsize)
+	plt.figure(2)
+	plt.plot(averagePlot)
+	plt.show()
 	# for i in range(0,len(amplitude),chunksize):
 	# 	note = getHzofChunk(amplitude[i:i+chunksize],binsize)
 	# 	print(note)
