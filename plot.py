@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from numpy import*
 from notes import*
+from file import*
 from scipy.io import wavfile
 
 
@@ -38,6 +39,8 @@ def analyzeRecording(amplitude,chunksize,binsize):
 			i+=30
 			freq = getHzofChunk(amplitude[i:i+chunksize],binsize)
 			print(identifyNote(freq))
+			note = str(identifyNote(freq)).strip('[]')
+			writeToFile(note)
 			edge=True
 		if (moving_average<750 and edge==True):
 			edge=False
@@ -59,14 +62,15 @@ def main():
 			moving_average = moving_average+ absolute(amplitude[x+i])
 		moving_average/=MAS
 		averagePlot.append(moving_average)
-		
 		i+=100
 	# plt.figure(1)
 	# plt.plot(absolute(amplitude))
 	# plt.figure(2)
 	# plt.plot(averagePlot)
 	# plt.show()
+	startFile()
 	analyzeRecording(amplitude,chunksize,binsize)
+	endFile()
 	# for i in range(0,len(amplitude),chunksize):
 	# 	note = getHzofChunk(amplitude[i:i+chunksize],binsize)
 	# 	print(note)
