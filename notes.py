@@ -47,9 +47,32 @@ frequencies = [27.0, 29.0, 30.0,
             1318.0, 1396.0, 1479.0, 1567.0, 1661.0, 1760.0, 1864.0, 1975.0, 2093.0, 2217.0, 2349.0,
             2489.0, 2637.0, 2793.0, 2959.0, 3135.0, 3322.0, 3520.0, 3729.0, 3951.0, 4186.0]
 
+durations = []
+noteDuration = ["8", "4", "2", "1"]
+
+def durationsInit(bpm):
+    secondsPerBeat = 60/bpm
+    #Assume 4/4 time
+    durations.append(secondsPerBeat/2) 
+    durations.append(secondsPerBeat) 
+    durations.append(secondsPerBeat*2)    
+    durations.append(secondsPerBeat*4)  
+
+def identifyDuration(dur):
+    i=0
+    index = 0
+    minDiff = 100000
+    while (i<len(durations)):
+        diff = abs(durations[i] - dur)
+        
+        if (abs(diff) < minDiff):
+            index = i
+            minDiff = abs(durations[i] - dur) 
+        i+=1
+    return noteDuration[index]
+
 def identifyNote(freq):
     i=0
-
     while (i<len(frequencies) and frequencies[i] < freq):
         i+=1
     if (i == len(frequencies)-1):

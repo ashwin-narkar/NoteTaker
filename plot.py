@@ -43,16 +43,17 @@ def analyzeRecording(amplitude,chunksize,binsize):
 			if (firstNoteDone):
 				duration = i - prevNoteIndex
 				prevNoteIndex = i
-				print("Note duration=" + str(duration))
+				#print("Note duration=" + str(duration))
+				duration = identifyDuration(duration/22050.0)
 				output.append(duration)
-				print("")
+				#print("")
 			else:
 				prevNoteIndex = i
 				firstNoteDone = True
-			print("Edge found at " + str(i) + " Average="+str(moving_average))
+			#print("Edge found at " + str(i) + " Average="+str(moving_average))
 			i+=30
 			freq = getHzofChunk(amplitude[i:i+chunksize],binsize)
-			print(identifyNote(freq))
+			#print(identifyNote(freq))
 
 			output.append(identifyNote(freq))
 
@@ -98,7 +99,8 @@ def analyzeRecording2(amplitude,chunksize,binsize):
 				continue
 			prevNoteIndex = i
 			freq = getHzofChunk(amplitude[i:i+chunksize],binsize)
-			output.append((duration)/22050.0)
+			duration = identifyDuration(duration/22050.0)
+			output.append(duration)
 			output.append(identifyNote(freq))
 	return output[1:]
 
@@ -107,6 +109,7 @@ def analyzeRecording2(amplitude,chunksize,binsize):
 def main():
 	filename = sys.argv[1]
 	fs, data = wavfile.read(filename)
+	durationsInit(150)
 	amplitude = data[:,0]
 	chunksize = 2205
 	binsize = fs/chunksize
@@ -123,16 +126,13 @@ def main():
 		averagePlot.append(moving_average)
 		i+=100
 
-	print(analyzeRecording2(amplitude,chunksize,binsize))
+	print(analyzeRecording(amplitude,chunksize,binsize))
 	# plt.figure(1)
 	# plt.plot(absolute(amplitude))
 
 	# plt.figure(2)
 	# plt.plot(averagePlot)
 	# plt.show()
-	startFile()
-	analyzeRecording(amplitude,chunksize,binsize)
-	endFile()
 
 	# for i in range(0,len(amplitude),chunksize):
 	# 	note = getHzofChunk(amplitude[i:i+chunksize],binsize)
