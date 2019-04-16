@@ -7,10 +7,14 @@ def startFile():
 		f.write("{\n")
 		f.close()
 
-def writeToFile(note):
+def writeToFile(notes):
+
 	f = open("sheet.ly", "a")
-	f.write(note)
-	f.write(" ")
+	i=0
+	while (i<len(notes)):
+		f.write(notes[i])
+		i+=2
+		f.write(" ")
 	f.close()
 
 def endFile():

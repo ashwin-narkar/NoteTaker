@@ -1,4 +1,4 @@
 \version "2.18.2"
 {
-d e fis e a a b fis g e fis e d b a g fis e 
+cis'16 cis'4 d' e' e' d' cis' b a a b cis' cis' b b 
 }
