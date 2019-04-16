@@ -11,9 +11,11 @@ def writeToFile(notes):
 
 	f = open("sheet.ly", "a")
 	i=0
-	while (i<len(notes)):
-		f.write(notes[i])
-		i+=2
+	while (i < len(notes)):
+		f.write(notes[i]) 	#writes notes
+		i += 1
+		f.write(notes[i])	#writes durations of notes
+		i += 1
 		f.write(" ")
 	f.close()
 
