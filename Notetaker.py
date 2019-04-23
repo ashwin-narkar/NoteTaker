@@ -15,13 +15,13 @@ def getHzofChunk(chunk,binsize):
 	return (argmax(fftMag)*binsize/2)
 
 def plotChunk(chunk):
-	plt.figure(1)
+	# plt.figure(1)
 	plt.plot(absolute(chunk))
 	# plt.figure(2)
 	# fftOut = fft.rfft(chunk)
 	# fftMag = absolute(fftOut)
 	# plt.plot(fftMag)
-	plt.show()
+	
 
 def analyzeRecording(amplitude,chunksize,binsize):
 	i=0
@@ -111,6 +111,7 @@ def main():
 	fs, data = wavfile.read(filename)
 	durationsInit(150)
 	amplitude = data[:,0]
+	print(len(amplitude))
 	chunksize = 2205
 	binsize = fs/chunksize
 	i=0
@@ -125,9 +126,18 @@ def main():
 		moving_average/=MAS
 		averagePlot.append(moving_average)
 		i+=100
-
-	notesArr = analyzeRecording(amplitude,chunksize,binsize)
+	i = 0
 	startFile()
+	# notesArr = analyzeRecording(amplitude[0:441000],chunksize,binsize)
+	# writeToFile(notesArr)
+	while (i < len(amplitude)-220500):
+		chunkToAnalyze = amplitude[i:i+220500]
+		notesArr = analyzeRecording(chunkToAnalyze,chunksize,binsize)
+		print(notesArr)
+		writeToFile(notesArr)
+		i+=220500
+	chunkToAnalyze = amplitude[i:]
+	notesArr = analyzeRecording(chunkToAnalyze,chunksize,binsize)
 	writeToFile(notesArr)
 	endFile()
 
