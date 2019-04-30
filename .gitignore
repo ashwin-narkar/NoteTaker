@@ -4,3 +4,4 @@ sheet.ly
 sheet.pdf
 *.ly
 *.pdf
+*.pyc
