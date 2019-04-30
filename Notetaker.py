@@ -109,7 +109,7 @@ def analyzeRecording2(amplitude,chunksize,binsize):
 def main():
 	filename = sys.argv[1]
 	fs, data = wavfile.read(filename)
-	durationsInit(150)
+	durationsInit(100)
 	amplitude = data[:,0]
 	print(len(amplitude))
 	chunksize = 2205
@@ -133,7 +133,6 @@ def main():
 	while (i < len(amplitude)-220500):
 		chunkToAnalyze = amplitude[i:i+220500]
 		notesArr = analyzeRecording(chunkToAnalyze,chunksize,binsize)
-		print(notesArr)
 		writeToFile(notesArr)
 		i+=220500
 	chunkToAnalyze = amplitude[i:]

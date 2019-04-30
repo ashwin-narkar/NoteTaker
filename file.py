@@ -19,6 +19,7 @@ def writeToFile(notes):
 		f.write(" ")
 	f.write(notes[i])
 	f.write("4")
+	f.write(" ")
 	
 	f.close()
 
