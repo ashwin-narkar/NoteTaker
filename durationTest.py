@@ -72,9 +72,7 @@ def analyzeChunk(chunk,mPofChunk):
 		i+=1
 
 
-
-
-def main():
+def temp():
 	filename = sys.argv[1]
 	fs, data = wavfile.read(filename)
 	amplitudeL = []
@@ -82,15 +80,21 @@ def main():
 	for i,j in data:
 		amplitudeL.append(j)
 		amplitudeR.append(i)
-	
+	plt.figure()
+	plt.plot(amplitudeL)
 	averagePlot = []
 	y = 0
 	every100Plot = []
 	i = 0
 	BPM = 150
-	MAS=300
+	MAS=500
 	while (i < len(amplitudeL)-MAS):
 		every100Plot.append(max(absolute(amplitudeL[i:i+MAS])))
+		moving_average = 0
+		for x in range(MAS):
+			moving_average = moving_average+ (absolute(amplitudeL[x+i])/MAS)
+		#moving_average/=MAS
+		averagePlot.append(moving_average)
 		i+=MAS
 	i = 0
 	chunkSize = 60/BPM #quarter note duration
@@ -98,21 +102,56 @@ def main():
 	chunkSize *= fs
 	chunkSize = int(chunkSize)
 
-	
 	while (i<len(amplitudeL)-chunkSize):
-		maxPlot = every100Plot[int(i/MAS):int((i+chunkSize)/MAS)]
-		print("Analyzing new Chunk")
-		result = thresholding_algo(maxPlot,3,2,0)
+		currAvg = averagePlot[int(i/MAS) : int((i+chunkSize)/MAS)]
+		
+		for x in range(15):
+			currAvg.insert(0,currAvg[0])
+		
 		plt.figure()
 		plt.plot(result["signals"])
 		print("")
 		i+=chunkSize
-	if (len(amplitudeL)-chunkSize < 0):
-		analyzeChunk(amplitudeL,every100Plot)
+
+	currAvg = averagePlot[int(i/MAS):]
+	for x in range(15):
+		currAvg.insert(0,currAvg[0])
+	
+	plt.figure()
+	plt.plot(currAvg)
+	plt.figure()
+	plt.plot(result["signals"])
+	print("")
+	i+=chunkSize
 
 	
 	plt.show()
 
+
+
+
+def main():
+	filename = sys.argv[1]
+	fs, data = wavfile.read(filename)
+	energy = []
+	averagePlot = []
+	MAS = 200
+	for i,j in data:
+		x = (int(i))*(int(i))
+		energy.append(x)
+	i = 0
+	while (i < len(energy)-MAS):
+		
+		moving_average = 0
+		for x in range(MAS):
+			moving_average += (-moving_average/MAS)+ (absolute(energy[x+i])/MAS)
+		averagePlot.append(moving_average)
+		i+=MAS
+	plt.figure()
+	plt.plot(energy)
+	plt.figure()
+	plt.plot(log(averagePlot))
+	plt.show()
 
 
 if __name__ == "__main__":
