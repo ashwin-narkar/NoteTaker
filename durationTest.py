@@ -128,30 +128,80 @@ def temp():
 	plt.show()
 
 
+def logDeriv(dataL,MAS,hammingArray):
+	energy = []
+	averagePlot = []
+	for i in range(MAS):
+		dataL.insert(0,0)
+		dataL.append(0)
+	i = MAS
+	while (i < len(dataL)-MAS):
+		e = 0
+		for j in range(-MAS,MAS):
+			e += dataL[i+j]*dataL[i+j]*hammingArray[j+MAS]
+		e *= 1/(2*MAS)
+		energy.append(e)	
+		i+=1
+	logEnergy = []
+	for x in energy:
+		logEnergy.append(log(x))
+	dE = np.diff(logEnergy)
+	i = 0
+	MAS = 100
+	while (i < len(energy)-MAS):
+		
+		moving_average = 0
+		for x in range(MAS):
+			moving_average += (-moving_average/MAS)+ (absolute(dE[x+i])/MAS)
+		averagePlot.append(moving_average)
+		i+=MAS
+	s = np.std(averagePlot)
+	a = np.average(averagePlot)
+	i = 10
+	peaks = []
+	while (i<len(averagePlot)):
+		for j in range(10):
+			if (averagePlot[i-j] > (a+3*s)):
+				peaks.append(i*100)
+				break
+		i+=10
+
+	plt.figure()
+	plt.hlines(a, 0, len(averagePlot))
+	plt.hlines(a+(3*s),0,len(averagePlot))
+	plt.plot(averagePlot)
+	print(peaks)
+	# plt.show()
+	# return peaks
 
 
 def main():
 	filename = sys.argv[1]
 	fs, data = wavfile.read(filename)
-	energy = []
-	averagePlot = []
+	dataL = []
+	
+	BPM = 150
+	chunkSize = 60/BPM #quarter note duration
+	chunkSize *= 8 #4 notes per measure
+	chunkSize *= fs
+	chunkSize = int(chunkSize)
 	MAS = 200
+	hammingArr = np.hamming(2*MAS)
 	for i,j in data:
-		x = (int(i))*(int(i))
-		energy.append(x)
-	i = 0
-	while (i < len(energy)-MAS):
-		
-		moving_average = 0
-		for x in range(MAS):
-			moving_average += (-moving_average/MAS)+ (absolute(energy[x+i])/MAS)
-		averagePlot.append(moving_average)
-		i+=MAS
+		x = (int(i))
+		dataL.append(x)
+	q = 0
+	peak = []
+	while (q < len(dataL)-chunkSize):
+		chunkArr = dataL[q:q+chunkSize]
+		logDeriv(chunkArr,MAS,hammingArr)
+		q+=chunkSize
+	chunkArr = dataL[q:]
+	logDeriv(chunkArr,MAS,hammingArr)
 	plt.figure()
-	plt.plot(energy)
-	plt.figure()
-	plt.plot(log(averagePlot))
+	plt.plot(dataL)
 	plt.show()
+	
 
 
 if __name__ == "__main__":
