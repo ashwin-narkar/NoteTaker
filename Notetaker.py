@@ -22,7 +22,6 @@ def plotChunk(chunk):
 	# fftMag = absolute(fftOut)
 	# plt.plot(fftMag)
 	
-
 def analyzeRecording(amplitude,chunksize,binsize):
 	i=0
 	MAS=100
