@@ -3,10 +3,10 @@ import sys
 import numpy as np
 from pydub import AudioSegment
 
-def normalize(sound, target_dBFS):
+def normalize(soundfile, target_dBFS):
+    sound = AudioSegment.from_file(soundfile, "wav")
     change_in_dBFS = target_dBFS - sound.dBFS
     return sound.apply_gain(change_in_dBFS)
 
-sound = AudioSegment.from_file("./musicFiles/Africa.wav", "wav")
-normalized_sound = normalize(sound, 10.0)
-normalized_sound.export("./musicFiles/nomrmalizedAudio.wav", format="wav")
+#normalized_sound = normalize(sound, -20.0)
+#normalized_sound.export("./musicFiles/nomrmalizedAudio.wav", format="wav")

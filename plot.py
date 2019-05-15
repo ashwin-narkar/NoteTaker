@@ -16,8 +16,8 @@ def getHzofChunk(chunk,binsize):
 
 def plotChunk(chunk):
 	plt.figure(1)
-	#plt.plot(absolute(chunk))
-	# plt.figure(2)
+	plt.plot(absolute(chunk))
+	plt.figure(2)
 	fftOut = fft.rfft(chunk)
 	fftMag = absolute(fftOut)
 	plt.plot(fftMag)
@@ -44,7 +44,7 @@ def main():
 		moving_average/=MAS
 		averagePlot.append(moving_average)
 		i+=100
-	plotChunk(amplitude)
+	plotChunk(amplitude[:int(fs/2)])
 
 
 
