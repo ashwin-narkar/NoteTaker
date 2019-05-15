@@ -171,7 +171,7 @@ def logDeriv(dataL,MAS,hammingArray):
 	plt.hlines(a+(3*s),0,len(averagePlot))
 	plt.plot(averagePlot)
 	print(peaks)
-	# plt.show()
+	plt.show()
 	# return peaks
 
 

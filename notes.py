@@ -48,12 +48,13 @@ frequencies = [27.0, 29.0, 30.0,
             2489.0, 2637.0, 2793.0, 2959.0, 3135.0, 3322.0, 3520.0, 3729.0, 3951.0, 4186.0]
 
 durations = []
-noteDuration = ["8", "4", "2", "1"]
+noteDuration = ["8", "4." , "4", "2", "1"]
 
 def durationsInit(bpm):
     secondsPerBeat = 60/bpm
     #Assume 4/4 time
-    durations.append(secondsPerBeat/2) 
+    durations.append(secondsPerBeat/2)
+    durations.append(secondsPerBeat*1.5) 
     durations.append(secondsPerBeat) 
     durations.append(secondsPerBeat*2)    
     durations.append(secondsPerBeat*4)  
