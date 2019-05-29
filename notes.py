@@ -43,6 +43,7 @@ frequencies = [27.0, 29.0, 30.0,
             65.0, 69.0, 73.0, 77.0, 82.0, 87.0, 92.0, 98.0, 103.0, 110.0, 116.0,
             123.0, 130.0, 138.0, 146.0, 155.0, 164.0, 174.0, 185.0, 196.0, 207.0, 220.0,
             233.0, 246.0, 261.0, 277.0, 293.0, 311.0, 329.0, 349.0, 369.0, 392.0, 415.0,
+            440.0, 466.0, 494.0, 523.0, 554.0, 587.0, 622.0, 659.0, 
             698.0, 739.0, 783.0, 830.0, 880.0, 932.0, 987.0, 1046.0, 1108.0, 1174.0, 1244.0,
             1318.0, 1396.0, 1479.0, 1567.0, 1661.0, 1760.0, 1864.0, 1975.0, 2093.0, 2217.0, 2349.0,
             2489.0, 2637.0, 2793.0, 2959.0, 3135.0, 3322.0, 3520.0, 3729.0, 3951.0, 4186.0]
@@ -54,10 +55,10 @@ def durationsInit(bpm):
     secondsPerBeat = 60/bpm
     #Assume 4/4 time
     durations.append(secondsPerBeat/2)
-    durations.append(secondsPerBeat*1.5) 
-    durations.append(secondsPerBeat) 
-    durations.append(secondsPerBeat*2)    
-    durations.append(secondsPerBeat*4)  
+    durations.append(secondsPerBeat*1.5)
+    durations.append(secondsPerBeat)
+    durations.append(secondsPerBeat*2)
+    durations.append(secondsPerBeat*4)
 
 def identifyDuration(dur):
     i=0
@@ -65,10 +66,10 @@ def identifyDuration(dur):
     minDiff = 100000
     while (i<len(durations)):
         diff = abs(durations[i] - dur)
-        
+
         if (abs(diff) < minDiff):
             index = i
-            minDiff = abs(durations[i] - dur) 
+            minDiff = abs(durations[i] - dur)
         i+=1
     return noteDuration[index]
 

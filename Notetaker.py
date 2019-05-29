@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from numpy import*
 from notes import*
 from file import*
+from chords import*
 from scipy.io import wavfile
 from duration import*
 import subprocess
@@ -14,19 +15,14 @@ import subprocess
 def getHzofChunk(chunk,binsize):
 	fftOut = fft.rfft(chunk)
 	fftMag = absolute(fftOut)
-	return (argmax(fftMag)*binsize/2)
+	maxHz = (argmax(fftMag)*binsize/2)
+	chordDetect (fftMag,maxHz,binsize)
+	return maxHz
 
-def plotChunk(chunk):
-	# plt.figure(1)
-	plt.plot(absolute(chunk))
-	# plt.figure(2)
-	# fftOut = fft.rfft(chunk)
-	# fftMag = absolute(fftOut)
-	# plt.plot(fftMag)
-	
 def analyzeNotes(chunk,peaks,FFTsize,fs):
 	i = 0
 	x = 1
+	print(peaks)
 	output = []
 	i = peaks[0]
 	freq = getHzofChunk(chunk[i:i+FFTsize],fs/FFTsize)
@@ -45,68 +41,28 @@ def analyzeNotes(chunk,peaks,FFTsize,fs):
 		freq = getHzofChunk(chunk[i:i+FFTsize],fs/FFTsize)
 		output.append(identifyNote(freq))
 		x+=1
-	
+
 	duration = int(1/measuresLeft)
 	output.append(str(duration))
 	# print(output)
 	return(output)
 
-def analyzeRecording2(amplitude,chunksize,binsize):
-	i=0
-	MAS=100
-	moving_average = 0
-	edge = False
-	firstNoteDone = False
-	prevNoteIndex = 0
-	duration = 0
-	prevMovingAvg = 0
-	output = []
-	while (i < len(amplitude)-chunksize):
-		moving_average = 0
-		for x in range(MAS):
-			moving_average = moving_average+ absolute(amplitude[x+i])
-		moving_average/=MAS
-		i+=100
-		if (firstNoteDone):
-			difference = moving_average - prevMovingAvg
-			if (difference > (0.4*moving_average)):
-				# print("Edge detected at " + str(i-50))
-				edge = True
-			else:
-				edge = False
-		else:
-			prevMovingAvg = moving_average
-			firstNoteDone = True
-			prevNoteIndex = -10000
-			continue
-		prevMovingAvg = moving_average
-
-		if (edge == True):
-
-			duration = i - prevNoteIndex
-			if (duration <= 700):
-				continue
-			prevNoteIndex = i
-			freq = getHzofChunk(amplitude[i:i+chunksize],binsize)
-			duration = identifyDuration(duration/22050.0)
-			output.append(duration)
-			output.append(identifyNote(freq))
-	return output[1:]
-
-
 
 def main():
 	filename = sys.argv[1]
 	fs, data = wavfile.read(filename)
+	print(len(notes))
+	print(len(frequencies))
 
-	
 	BPM = 150
 	durationsInit(BPM)
 	amplitude = []
-	chunkSize = 60/BPM #quarter note duration
+	chunkSize = 60.0/BPM #quarter note duration
 	chunkSize *= 8 #4 notes per measure
 	chunkSize *= fs
+
 	chunkSize = int(chunkSize)
+	print(chunkSize)
 	fftSize = 2205
 	MAS = 200
 	hammingArr = np.hamming(2*MAS)
@@ -116,8 +72,9 @@ def main():
 	startFile()
 	q = 0
 
-	
+
 	peak = []
+
 	print("Analyzing Recording: " + str((q/len(amplitude))*100) + "%")
 	while (q < len(amplitude)-chunkSize):
 		chunkArr = amplitude[q:q+chunkSize]
@@ -128,6 +85,7 @@ def main():
 		print("Analyzing Recording: " + str(int((q/len(amplitude))*100)) + "%")
 	chunkArr = amplitude[q:]
 	peak = logDeriv(chunkArr,MAS,hammingArr)
+
 	notesArr = analyzeNotes(chunkArr,peak,fftSize,fs)
 	writeToFile(notesArr)
 	# print(peak)
@@ -136,7 +94,7 @@ def main():
 	endFile()
 	print("Analysis Complete!")
 	print()
-	subprocess.run(["lilypond", "sheet.ly"])
+	#subprocess.run(["lilypond", "sheet.ly"])
 
 
 

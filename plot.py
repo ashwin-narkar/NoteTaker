@@ -21,6 +21,8 @@ def plotChunk(chunk):
 	fftOut = fft.rfft(chunk)
 	fftMag = absolute(fftOut)
 	plt.plot(fftMag)
+	plt.hlines(np.average(fftMag), 0, len(fftMag))
+	plt.hlines(np.std(fftMag)*20 + np.average(fftMag),0,len(fftMag))
 	plt.show()
 
 
