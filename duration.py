@@ -42,16 +42,16 @@ def logDeriv(dataL,MAS,hammingArray):		#uses derivative of log(energy) to calcul
 	peaks = []
 	while (i<len(averagePlot)):
 		for j in range(10):
-			if (averagePlot[i-j] > (a+3*s)):
+			if (abs(averagePlot[i-j] - averagePlot[i]) > (a+1.5*s)):
 				peaks.append(i*100)
 				break
 		i+=10
 
-	plt.figure()
-	plt.hlines(a, 0, len(averagePlot))
-	plt.hlines(a+(3*s),0,len(averagePlot))
-	plt.plot(averagePlot)
-	print(peaks)
-	plt.show()
+	# plt.figure()
+	# plt.hlines(a, 0, len(averagePlot))
+	# plt.hlines(a+(3.5*s),0,len(averagePlot))
+	# plt.plot(averagePlot)
+	# print(peaks)
+	# plt.show()
 
 	return peaks

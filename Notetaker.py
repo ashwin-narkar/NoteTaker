@@ -32,6 +32,9 @@ def analyzeNotes(chunk,peaks,FFTsize,fs):
 
 	while (x<len(peaks)):
 		duration = peaks[x] - peaks[x-1]
+		if (duration/22050.0 < durations[0]/2.0):
+			x+=1
+			continue
 		duration = identifyDuration(duration/22050.0)
 		if (duration != "4."):
 			measuresLeft -= (1/int(duration))
