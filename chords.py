@@ -12,13 +12,13 @@ def chordDetect(fftMag, Hz, binsize):
     # frequency we found *1.5
     
     ff = 0.08;
-    thresh = np.std(fftMag) * 8 + np.average(fftMag)
-    plt.plot(fftMag)
-    plt.hlines(thresh, 0, len(fftMag))
-    plt.show()
+    thresh = np.std(fftMag) * 6 + np.average(fftMag)
+    # plt.plot(fftMag)
+    # plt.hlines(thresh, 0, len(fftMag))
+    # plt.show()
     #checkFreq = Hz
     foundHz = Hz           #set foundHz to freq at 1.5 times the checkFreq first
-    print(foundHz)
+    
     rootConfirmed = False
     fifthConfirmed = False
     chordFound = False
@@ -62,13 +62,14 @@ def chordDetect(fftMag, Hz, binsize):
 
 #--------------------------------------\/FIFTH FIRST\/-------------------------------------
     rootNoteFreq = math.floor(foundHz / 1.5 * 2 / binsize)
+    
     for i in range(-1, 2):
         if fftMag[rootNoteFreq + i] > thresh:
-            rootNote = identifyNote(rootNoteFreq)
+            rootNote = identifyNote(rootNoteFreq*binsize/2)
             print("Peak at fifth and root found at " + str(rootNote))
             fifthConfirmed = True
 
-    majorThirdFreq = math.floor(rootNoteFreq * 1.25 * 2 / binsize)
+    majorThirdFreq = math.floor(rootNoteFreq * 1.25)
 
     for i in range(-1, 2):
         if fifthConfirmed == True:
@@ -78,7 +79,7 @@ def chordDetect(fftMag, Hz, binsize):
                 chordFound = True
                 print("Found major chord")
 
-    minorThirdFreq = math.floor(rootNoteFreq * 1.2 * 2 / binsize)
+    minorThirdFreq = math.floor(rootNoteFreq * 1.2)
 
     for i in range(-1, 2):
         if fifthConfirmed == True:
@@ -98,11 +99,11 @@ def chordDetect(fftMag, Hz, binsize):
     rootNoteFreq = math.floor(foundHz * 0.8 * 2 / binsize)
     for i in range(-1, 2):
         if fftMag[rootNoteFreq + i] > thresh:
-            rootNote = identifyNote(rootNoteFreq)
+            rootNote = identifyNote(rootNoteFreq*binsize/2)
             chordFound = True
             print("Peak at major third with root at " + str(rootNote))
 
-    rootNoteFreq = math.floor(foundHz / 6 * 5 * 2 / binsize)
+    rootNoteFreq = math.floor(foundHz / 6 * 5)
 
     for i in range(-1, 2):
         if fftMag[rootNoteFreq + i] > thresh:
@@ -111,10 +112,10 @@ def chordDetect(fftMag, Hz, binsize):
             print("Peak at minor third with root at " + str(rootNote))
 
 
-    fifthFreq = math.floor(rootNoteFreq * 1.5 * 2 / binsize)
+    fifthFreq = math.floor(rootNoteFreq * 1.5)
     for i in range(-1, 2):
         if fftMag[fifthFreq + i] > thresh:
-            rootNote = identifyNote(rootNoteFreq)
+            rootNote = identifyNote(rootNoteFreq*binsize/2)
             print("Found the fifth")
 #--------------------------------------^THIRD FIRST^---------------------------------------
 
