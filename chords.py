@@ -10,7 +10,7 @@ def chordDetect(fftMag, Hz, binsize):
     # check fifth first
     # check fifth above
     # frequency we found *1.5
-    plt.plot(fftMag)
+    #plt.plot(fftMag)
     ff = 0.08;
     thresh = np.std(fftMag) * 8 + np.average(fftMag)
     #checkFreq = Hz
@@ -111,4 +111,5 @@ def chordDetect(fftMag, Hz, binsize):
 
     if chordFound == False:
         print("Single note: " + identifyNote(Hz))
+
     #plt.show()
