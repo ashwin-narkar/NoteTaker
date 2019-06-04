@@ -47,11 +47,11 @@ def logDeriv(dataL,MAS,hammingArray):		#uses derivative of log(energy) to calcul
 				break
 		i+=10
 
-	# plt.figure()
-	# plt.hlines(a, 0, len(averagePlot))
-	# plt.hlines(a+(3*s),0,len(averagePlot))
-	# plt.plot(averagePlot)
-	
-	# plt.show()
+	plt.figure()
+	plt.hlines(a, 0, len(averagePlot))
+	plt.hlines(a+(3*s),0,len(averagePlot))
+	plt.plot(averagePlot)
+	print(peaks)
+	plt.show()
 
 	return peaks

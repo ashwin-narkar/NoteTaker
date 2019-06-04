@@ -17,7 +17,7 @@ def getHzofChunk(chunk,binsize):
 	fftMag = absolute(fftOut)
 	fftMag[0] = 0
 	maxHz = (argmax(fftMag)*binsize/2)
-	chordDetect (fftMag,maxHz,binsize)
+	chordDetect(fftMag,maxHz,binsize)
 	return maxHz
 
 def analyzeNotes(chunk,peaks,FFTsize,fs):
