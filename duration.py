@@ -51,7 +51,7 @@ def logDeriv(dataL,MAS,hammingArray):		#uses derivative of log(energy) to calcul
 	# plt.hlines(a, 0, len(averagePlot))
 	# plt.hlines(a+(3*s),0,len(averagePlot))
 	# plt.plot(averagePlot)
-	print(peaks)
+	
 	# plt.show()
 
 	return peaks

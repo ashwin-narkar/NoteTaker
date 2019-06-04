@@ -15,6 +15,7 @@ import subprocess
 def getHzofChunk(chunk,binsize):
 	fftOut = fft.rfft(chunk)
 	fftMag = absolute(fftOut)
+	fftMag[0] = 0
 	maxHz = (argmax(fftMag)*binsize/2)
 	chordDetect (fftMag,maxHz,binsize)
 	return maxHz
@@ -22,7 +23,7 @@ def getHzofChunk(chunk,binsize):
 def analyzeNotes(chunk,peaks,FFTsize,fs):
 	i = 0
 	x = 1
-	print(peaks)
+	
 	output = []
 	i = peaks[0]
 	freq = getHzofChunk(chunk[i:i+FFTsize],fs/FFTsize)
@@ -72,12 +73,13 @@ def main():
 	startFile()
 	q = 0
 
-
 	peak = []
 
 	print("Analyzing Recording: " + str((q/len(amplitude))*100) + "%")
 	while (q < len(amplitude)-chunkSize):
 		chunkArr = amplitude[q:q+chunkSize]
+		# plt.plot(chunkArr)
+		# plt.show()
 		peak = logDeriv(chunkArr,MAS,hammingArr)
 		notesArr = analyzeNotes(chunkArr,peak,fftSize,fs)
 		writeToFile(notesArr)
@@ -85,7 +87,7 @@ def main():
 		print("Analyzing Recording: " + str(int((q/len(amplitude))*100)) + "%")
 	chunkArr = amplitude[q:]
 	peak = logDeriv(chunkArr,MAS,hammingArr)
-
+	
 	notesArr = analyzeNotes(chunkArr,peak,fftSize,fs)
 	writeToFile(notesArr)
 	# print(peak)
