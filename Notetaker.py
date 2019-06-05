@@ -32,10 +32,13 @@ def analyzeNotes(chunk,peaks,FFTsize,fs):
 
 	while (x<len(peaks)):
 		duration = peaks[x] - peaks[x-1]
+		print(duration)
+		print(duration/22050.0)
 		if (duration/22050.0 < durations[0]/2.0):
 			x+=1
 			continue
 		duration = identifyDuration(duration/22050.0)
+	
 		if (duration != "4."):
 			measuresLeft -= (1/int(duration))
 		else:
@@ -55,18 +58,19 @@ def analyzeNotes(chunk,peaks,FFTsize,fs):
 def main():
 	filename = sys.argv[1]
 	fs, data = wavfile.read(filename)
-	print(len(notes))
-	print(len(frequencies))
+	# print(len(notes))
+	# print(len(frequencies))
 
 	BPM = 150
 	durationsInit(BPM)
+	print(durations)
 	amplitude = []
 	chunkSize = 60.0/BPM #quarter note duration
 	chunkSize *= 8 #4 notes per measure
 	chunkSize *= fs
 
 	chunkSize = int(chunkSize)
-	print(chunkSize)
+	# print(chunkSize)
 	fftSize = 2205
 	MAS = 200
 	hammingArr = np.hamming(2*MAS)
