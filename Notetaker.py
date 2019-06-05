@@ -17,17 +17,16 @@ def getHzofChunk(chunk,binsize):
 	fftMag = absolute(fftOut)
 	fftMag[0] = 0
 	maxHz = (argmax(fftMag)*binsize/2)
-	chordDetect(fftMag,maxHz,binsize)
-	return maxHz
+	return chordDetect(fftMag,maxHz,binsize)
 
 def analyzeNotes(chunk,peaks,FFTsize,fs):
 	i = 0
 	x = 1
-	
+
 	output = []
 	i = peaks[0]
 	freq = getHzofChunk(chunk[i:i+FFTsize],fs/FFTsize)
-	output.append(identifyNote(freq))
+	output.append(freq)
 	measuresLeft = 2
 
 	while (x<len(peaks)):
@@ -43,10 +42,11 @@ def analyzeNotes(chunk,peaks,FFTsize,fs):
 		output.append(duration)
 		i = peaks[x]
 		freq = getHzofChunk(chunk[i:i+FFTsize],fs/FFTsize)
-		output.append(identifyNote(freq))
+		output.append(freq)
 		x+=1
 
 	duration = int(1/measuresLeft)
+	print(measuresLeft)
 	output.append(str(duration))
 	# print(output)
 	return(output)
@@ -55,10 +55,8 @@ def analyzeNotes(chunk,peaks,FFTsize,fs):
 def main():
 	filename = sys.argv[1]
 	fs, data = wavfile.read(filename)
-	print(len(notes))
-	print(len(frequencies))
 
-	BPM = 150
+	BPM = 75
 	durationsInit(BPM)
 	amplitude = []
 	chunkSize = 60.0/BPM #quarter note duration
@@ -66,7 +64,7 @@ def main():
 	chunkSize *= fs
 
 	chunkSize = int(chunkSize)
-	print(chunkSize)
+	#print(chunkSize)
 	fftSize = 2205
 	MAS = 200
 	hammingArr = np.hamming(2*MAS)
@@ -90,7 +88,7 @@ def main():
 		print("Analyzing Recording: " + str(int((q/len(amplitude))*100)) + "%")
 	chunkArr = amplitude[q:]
 	peak = logDeriv(chunkArr,MAS,hammingArr)
-	
+
 	notesArr = analyzeNotes(chunkArr,peak,fftSize,fs)
 	writeToFile(notesArr)
 	# print(peak)

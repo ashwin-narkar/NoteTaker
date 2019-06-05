@@ -116,7 +116,7 @@ def chordDetect(fftMag, Hz, binsize):
             thirdNote = identifyNote(foundHz)
             rootNote = identifyNote(rootNoteFreq*binsize/2)
             thirdConfirmed = True
-            nord = "<" + str(rootNote) + " " str(thirdNote) + " "
+            nord = "<" + str(rootNote) + " " + str(thirdNote) + " "
             #print("Peak at major third with root at " + str(rootNote))
 
 
@@ -126,7 +126,7 @@ def chordDetect(fftMag, Hz, binsize):
         if fftMag[rootNoteFreq + i] > thresh and thirdConfirmed == False:
             rootNote = identifyNote(rootNoteFreq * binsize/2)
             thirdConfirmed = True
-            nord = "<" + str(rootNote) + " " str(thirdNote) + " "
+            nord = "<" + str(rootNote) + " " + str(thirdNote) + " "
             #print("Peak at minor third with root at " + str(rootNote))
 
     if (thirdConfirmed):
