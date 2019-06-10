@@ -19,7 +19,7 @@ def logDeriv(dataL,MAS,hammingArray):		#uses derivative of log(energy) to calcul
 		e = 0
 		for j in range(-MAS,MAS):
 			e += dataL[i+j]*dataL[i+j]*hammingArray[j+MAS]
-		e *= 1/(2*MAS)
+		e *= 1.0/(2*MAS)
 		energy.append(e)
 		i+=1
 

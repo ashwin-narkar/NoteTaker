@@ -1,4 +1,4 @@
 \version "2.18.2"
 {
-g'2 c'2 e'2 g'2 f'2 f'2 a'2 c''0 g'2 d''2 b'2 g'2 f'2 c''2 a'2 f'0
+<c e g>8 c4 e4 g4 <f a c'>4 f4 a4 c'2 <g b d'>4 d'4 b4 g4 <f a c'>4 c'4 a4 f4 
 }

@@ -32,11 +32,11 @@ def analyzeNotes(chunk,peaks,FFTsize,fs):
 	while (x<len(peaks)):
 		duration = peaks[x] - peaks[x-1]
 		print(duration)
-		print(duration/22050.0)
-		if (duration/22050.0 < durations[0]/2.0):
+		print(duration/fs)
+		if (duration/fs < durations[0]/2.0):
 			x+=1
 			continue
-		duration = identifyDuration(duration/22050.0)
+		duration = identifyDuration(duration/fs)
 
 		if (duration != "4."):
 			measuresLeft -= (1/int(duration))
@@ -61,7 +61,7 @@ def main():
 	# print(len(notes))
 	# print(len(frequencies))
 
-	BPM = 75
+	BPM = 150
 	durationsInit(BPM)
 	print(durations)
 	amplitude = []
@@ -91,7 +91,7 @@ def main():
 		notesArr = analyzeNotes(chunkArr,peak,fftSize,fs)
 		writeToFile(notesArr)
 		q+=chunkSize
-		print("Analyzing Recording: " + str(int((q/len(amplitude))*100)) + "%")
+		print("Analyzing Recording: " + str(int((q/len(amplitude))*100.0)) + "%")
 	chunkArr = amplitude[q:]
 	peak = logDeriv(chunkArr,MAS,hammingArr)
 
@@ -102,8 +102,6 @@ def main():
 	# writeToFile(notesArr)
 	endFile()
 	print("Analysis Complete!")
-	print()
-	#subprocess.run(["lilypond", "sheet.ly"])
 
 
 
